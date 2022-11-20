@@ -1,26 +1,26 @@
-# Do not change version. This is the version of aws buildspec, not the version of your buldspec file.
 version: 0.2
+
 phases:
-  install:
-    runtime-versions:
-      nodejs: 10
   pre_build:
     commands:
-      - echo Installing source NPM dependencies...
-      - npm install
+      - echo Logging in to Amazon ECR...
+      - aws --version
+      - aws ecr get-login-password --region $AWS_DEFAULT_REGION | docker login --username AWS --password-stdin 302217362730.dkr.ecr.eu-west-1.amazonaws.com
+      - REPOSITORY_URI=302217362730.dkr.ecr.eu-west-1.amazonaws.com/devops_web
+      - COMMIT_HASH=$(echo $CODEBUILD_RESOLVED_SOURCE_VERSION | cut -c 1-7)
+      - IMAGE_TAG=${COMMIT_HASH:=latest}
   build:
     commands:
       - echo Build started on `date`
-      - echo Compiling the Node.js code
-      - npm run test
+      - echo Building the Docker image...
+      - docker build -t $REPOSITORY_URI .
+      - docker tag $REPOSITORY_URI $REPOSITORY_URI:$IMAGE_TAG
   post_build:
     commands:
       - echo Build completed on `date`
-# Include only the files required for your application to run.
+      - echo Pushing the Docker images...
+      - docker push $REPOSITORY_URI:$IMAGE_TAG
+      - echo Writing image definitions file...
+      - printf '[{"name":"devops_web","imageUri":"%s"}]' $REPOSITORY_URI:$IMAGE_TAG > imagedefinitions.json
 artifacts:
-  files:
-    - src/index.js
-    - src/app.js
-    - package.json
-    - node_modules/**/*
-    - bin/**/*
+    files: imagedefinitions.json
