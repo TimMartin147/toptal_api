@@ -1,0 +1,6 @@
+version: '3.7'
+services:
+  api:
+    image: ${ECR_HOST}/api-app:${TAG}
+    build:
+      context: .

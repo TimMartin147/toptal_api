@@ -13,34 +13,55 @@ const conString = {
 
 // Routes
 
-// app.get('/api/status', function(req, res) {
-
-//     res.status(200).send("HELLO");
-//   });
-
 app.get('/api/status', function(req, res) {
-//'SELECT now() as time', [], function(err, result
+  //'SELECT now() as time', [], function(err, result
 
-  const Pool = require('pg').Pool
-  const pool = new Pool(conString)
-  // connection using created pool
-  pool.connect((err, client, release) => {
-    if (err) {
-      return console.error('Error acquiring client', err.stack)
-    }
-    client.query('SELECT now() as time', (err, result) => {
-      release()
-    if (err) {
-      console.log(err);
-      return console.error('Error executing query', err.stack)
-    }
-    res.status(200).send(result.rows);
+    // const Pool = require('pg').Pool
+    // const pool = new Pool(conString)
+    // // connection using created pool
+    // pool.connect((err, client, release) => {
+    //   if (err) {
+    //     return console.error('Error acquiring client', err.stack)
+    //   }
+    //   client.query('SELECT now() as time', (err, result) => {
+    //     release()
+    //   if (err) {
+    //     console.log(err);
+    //     return console.error('Error executing query', err.stack)
+    //   }
+    //   res.status(200).send(result.rows);
+    // });
+
+    res.status(200).send("HELLO");
+  // });
+  
+    // pool shutdown
+    // pool.end()
   });
-});
 
-  // pool shutdown
-  pool.end()
-});
+// app.get('/api/status', function(req, res) {
+// //'SELECT now() as time', [], function(err, result
+
+//   const Pool = require('pg').Pool
+//   const pool = new Pool(conString)
+//   // connection using created pool
+//   pool.connect((err, client, release) => {
+//     if (err) {
+//       return console.error('Error acquiring client', err.stack)
+//     }
+//     client.query('SELECT now() as time', (err, result) => {
+//       release()
+//     if (err) {
+//       console.log(err);
+//       return console.error('Error executing query', err.stack)
+//     }
+//     res.status(200).send(result.rows);
+//   });
+// });
+
+//   // pool shutdown
+//   pool.end()
+// });
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
