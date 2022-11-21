@@ -1,6 +1,6 @@
 version: '3.7'
 services:
-  api:
-    image: ${ECR_HOST}/api-app:${TAG}
+  devops_api:
+    image: ${ECR_HOST}/devops_api:${TAG}
     build:
       context: .
